@@ -31,7 +31,25 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
       h3("Placeholder information"),
       p("This is a summary of the project")
       
+  ),
+  # create tab for HF Map
+  tabPanel("Human Freedom Scores", 
+    titlePanel("Human Freedom Score"),
+    h3("Static"),
+    plotlyOutput("staticHF"),
+    h3("Human Freedom Scores By Year"),
+    selectInput('select_year',
+                label = "Select Year",
+                choices = unique(hf_df$Year),
+                selected = 2008
+      ),
+    # dataTableOutput("datatable")
+    plotlyOutput("dynamicHF")
+    # p("This is a summary of the project")
+    
+    
   )
+  
 )
 
 

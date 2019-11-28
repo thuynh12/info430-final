@@ -38,6 +38,18 @@ hf_df_2009 <- dbGetQuery(con, paste("
                                   ON e.Country_ID =c.Country_ID
                                   WHERE Year(e.EntryYear) = 2009"))
 
+
+allCodes <- dbGetQuery(con, paste("
+                                  SELECT e.hf_score, e.ef_score, e.pf_score, hfi.ef_legal_military, 
+                                  hfi.pf_expression, hfi.pf_religion, CountryName, Year=Year(EntryYear)
+                                  FROM [human-freedom-index] As hfi
+                                  JOIN Entries As e 
+                                  ON hfi.hf_score = e.hf_score
+                                  JOIN Countries As c
+                                  On e.Country_ID = c.Country_ID",
+                                  sep=""))
+
+
 colorList <- list(color = toRGB("grey"), width = 0.5)
 
 m_options <- list(showframe = FALSE, showcoastlines = FALSE, 
@@ -62,6 +74,51 @@ m_options <- list(showframe = FALSE, showcoastlines = FALSE,
  
 
 server <- function(input, output) {
+  
+  #add reactive data information. Dataset = built in diamonds data
+  dataset <- reactive({
+    allCodes %>% 
+      filter(Year == input$select_year & CountryName == input$select_country)
+  })
+  
+  output$trendPlot <- renderPlotly({
+    df <- dataset()
+    p <- plot_ly(
+      x = c('hf_scores', 'ef_score', 'pf_score', 'ef_legal_military', 'pf_expression', 'pf_religion'),
+      y = c(df$hf_score, df$ef_score, df$pf_score, df$ef_legal_military, df$pf_expression, df$pf_religion),
+      type = 'bar'
+    ) %>% 
+      layout(
+        title = 'help',
+        xaxis = list(
+          type = 'category',
+          title = 'scores'
+        ),
+        yaxis = list(
+          title = 'score',
+          range = c(0, 10)
+        )
+      )
+    
+    
+    # chart <- plot_ly(
+    #   x = 'hf_score',
+    #   y = dt$hf_score,
+    #   type = 'bar'
+    # ) %>%
+    #   layout(
+    #     title = 'Temp',
+    #     xaxis = list(
+    #       type = 'category',
+    #       title = 'Scores'
+    #     ),
+    #     yaxis = list(
+    #       title = 'Score',
+    #       range = c(0,10)
+    #     )
+    #   )
+  })
+  
   
   # scatter plot of economic and personal freedom vs human freedom (with trend lines)
   output$scatterPlot1 <- renderPlotly({

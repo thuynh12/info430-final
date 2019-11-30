@@ -138,7 +138,7 @@ server <- function(input, output) {
   })
   
   
-  output$staticHF <- renderLeaflet({
+  output$staticHF <- renderPlotly({
     plot_geo(hf_df_2009) %>%
       add_trace(
         z = ~hf_score,

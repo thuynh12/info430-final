@@ -26,13 +26,49 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
   ), 
   
   # create placeholder tab
-  tabPanel("Summary", 
-      titlePanel("Summary"),
-      h3("Placeholder information"),
-      p("This is a summary of the project")
-      
-  )
+  
+  
+  # create tab for HF Map
+  tabPanel("Human Freedom Scores", 
+    titlePanel("Human Freedom Score"),
+    h3("Static"),
+    plotlyOutput("staticHF"),
+    h3("Human Freedom Scores By Year"),
+    selectInput('select_year',
+                label = "Select Year",
+                choices = unique(hf_df$Year),
+                selected = 2008
+      ),
+    # dataTableOutput("datatable")
+    plotlyOutput("dynamicHF")
+    # p("This is a summary of the project")
+    
+  ),
+  tabPanel("Interactive",
+           titlePanel("Summary"),
+           headerPanel("Title"),
+           sidebarPanel(
+             selectInput('select_country', 'select_country', choices = unique(allCodes$CountryName), selected = "Iran"),
+             selectInput('select_year', 'select_year', choices = unique(allCodes$Year), selected = 2008)
+           ),
+           mainPanel(
+             plotlyOutput('trendPlot')
+           )
+           )
+
 )
+
+# tabPanel("Interactive Bar Chart", 
+#          titlePanel("Summary"),
+#          headerPanel("Title for side panel"),
+#          sidebarPanel(
+#            selectInput('select_country', choices = allCodes$CountryName, selected = "A"),
+#            selectInput('select_year', choices = unique(allCodes$Year), selected = 2008)
+#          ), 
+#          mainPanel(
+#            plotlyOutput('trendPlot', height = "900px")
+#          )
+         
 
 
 shinyApp(ui = ui, server = server)

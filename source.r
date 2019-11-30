@@ -1,4 +1,9 @@
 library(shiny)
+# library(leaflet)
+# library(maps)
+# library(tigris)
+# library(sp)
+# library(maptools)
 library(odbc)
 library(DBI)
 library(dplyr)
@@ -19,7 +24,101 @@ entry <- dbGetQuery(con, paste("
                                On e.Country_ID = c.Country_ID", 
                                sep=""))
 
+hf_df <- dbGetQuery(con, paste("SELECT ISO_code, c.CountryName, hf_score, Year=Year(EntryYear) 
+                                FROM Entries AS e
+                                JOIN Countries as c
+                                ON e.Country_ID =c.Country_ID"))
+
+
+
+hf_df_2009 <- dbGetQuery(con, paste("
+                                  SELECT ISO_code, c.CountryName, hf_score
+                                  FROM Entries AS e
+                                  JOIN Countries as c
+                                  ON e.Country_ID =c.Country_ID
+                                  WHERE Year(e.EntryYear) = 2009"))
+
+
+allCodes <- dbGetQuery(con, paste("
+                                  SELECT e.hf_score, e.ef_score, e.pf_score, hfi.ef_legal_military, 
+                                  hfi.pf_expression, hfi.pf_religion, CountryName, Year=Year(EntryYear)
+                                  FROM [human-freedom-index] As hfi
+                                  JOIN Entries As e 
+                                  ON hfi.hf_score = e.hf_score
+                                  JOIN Countries As c
+                                  On e.Country_ID = c.Country_ID",
+                                  sep=""))
+
+
+colorList <- list(color = toRGB("grey"), width = 0.5)
+
+m_options <- list(showframe = FALSE, showcoastlines = FALSE, 
+                  projection = list(type = 'Mercator'))
+
+
+
+# plot_geo(hf_df_2009) %>% 
+#   add_trace(
+#     z = ~hf_score, 
+#     color = ~hf_score,
+#     colors = 'Blues',
+#     text = ~CountryName,
+#     locations = ~ISO_code,
+#     marker = list(line = colorList)
+#   ) %>% 
+#   colorbar(title = "Human Freedom Score") %>% 
+#   layout(
+#     title = "Human Freedom Score in 2009",
+#     geo = m_options
+#   )
+ 
+
 server <- function(input, output) {
+  
+  #add reactive data information. Dataset = built in diamonds data
+  dataset <- reactive({
+    allCodes %>% 
+      filter(Year == input$select_year & CountryName == input$select_country)
+  })
+  
+  output$trendPlot <- renderPlotly({
+    df <- dataset()
+    p <- plot_ly(
+      x = c('hf_scores', 'ef_score', 'pf_score', 'ef_legal_military', 'pf_expression', 'pf_religion'),
+      y = c(df$hf_score, df$ef_score, df$pf_score, df$ef_legal_military, df$pf_expression, df$pf_religion),
+      type = 'bar'
+    ) %>% 
+      layout(
+        title = 'help',
+        xaxis = list(
+          type = 'category',
+          title = 'scores'
+        ),
+        yaxis = list(
+          title = 'score',
+          range = c(0, 10)
+        )
+      )
+    
+    
+    # chart <- plot_ly(
+    #   x = 'hf_score',
+    #   y = dt$hf_score,
+    #   type = 'bar'
+    # ) %>%
+    #   layout(
+    #     title = 'Temp',
+    #     xaxis = list(
+    #       type = 'category',
+    #       title = 'Scores'
+    #     ),
+    #     yaxis = list(
+    #       title = 'Score',
+    #       range = c(0,10)
+    #     )
+    #   )
+  })
+  
   
   # scatter plot of economic and personal freedom vs human freedom (with trend lines)
   output$scatterPlot1 <- renderPlotly({
@@ -36,6 +135,55 @@ server <- function(input, output) {
                 line = list(color = 'rgb(253,198,131)')) %>%
       layout(title = "Economic and Personal Freedom vs. Human Freedom", 
              xaxis = list(title = "Human Freedom Score"), yaxis = list(title = "Freedom Score"))
+  })
+  
+  
+  output$staticHF <- renderPlotly({
+    plot_geo(hf_df_2009) %>%
+      add_trace(
+        z = ~hf_score,
+        color = ~hf_score,
+        colors = 'Blues',
+        text = ~CountryName,
+        locations = ~ISO_code,
+        marker = list(line = colorList)
+      ) %>%
+      colorbar(title = "Human Freedom Score") %>%
+      layout(
+        title = "Human Freedom Score in 2009",
+        geo = m_options
+      )
+    
+  })
+  
+  hf_df_react <- reactive({
+    year_selection <- hf_df %>% 
+      filter(Year == input$select_year)
+  })
+  
+  
+  
+  # output$datatable <- renderDataTable({
+  #   hf_df_react()
+  # })
+  output$dynamicHF <-renderPlotly({
+    updated_hf_df <- hf_df_react()
+    
+    u_df_df <- plot_geo(updated_hf_df) %>%
+      add_trace(
+        z = ~hf_score,
+        color = ~hf_score,
+        colors = 'Blues',
+        text = ~CountryName,
+        locations = ~ISO_code,
+        marker = list(line = colorList)
+      ) %>%
+      colorbar(title = "Human Freedom Score") %>%
+      layout(
+        title = "Human Freedom Score in 2009",
+        geo = m_options
+      )
+    
   })
   
 }

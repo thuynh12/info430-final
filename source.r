@@ -1,9 +1,4 @@
 library(shiny)
-# library(leaflet)
-# library(maps)
-# library(tigris)
-# library(sp)
-# library(maptools)
 library(odbc)
 library(DBI)
 library(dplyr)
@@ -48,6 +43,18 @@ allCodes <- dbGetQuery(con, paste("
                                   JOIN Countries As c
                                   On e.Country_ID = c.Country_ID",
                                   sep=""))
+
+
+
+all <- dbGetQuery(con, paste("
+                                SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
+                                ef_score, ef_legal_military, pf_expression, pf_religion
+                                FROM Entries as E
+                                JOIN Countries as O
+                                ON E.Country_ID = O.Country_ID",
+                                sep=""))
+allCols <- colnames(all)
+allIDS <- allCols[6:10]
 
 
 colorList <- list(color = toRGB("grey"), width = 0.5)
@@ -101,22 +108,6 @@ server <- function(input, output) {
       )
     
     
-    # chart <- plot_ly(
-    #   x = 'hf_score',
-    #   y = dt$hf_score,
-    #   type = 'bar'
-    # ) %>%
-    #   layout(
-    #     title = 'Temp',
-    #     xaxis = list(
-    #       type = 'category',
-    #       title = 'Scores'
-    #     ),
-    #     yaxis = list(
-    #       title = 'Score',
-    #       range = c(0,10)
-    #     )
-    #   )
   })
   
   
@@ -181,6 +172,34 @@ server <- function(input, output) {
       colorbar(title = "Human Freedom Score") %>%
       layout(
         title = "Human Freedom Score in 2009",
+        geo = m_options
+      )
+    
+  })
+  
+  
+  ByIdAndYear <- reactive({
+    subset_all <- all %>% 
+      select(ISO_Code, CountryName, Year, input$select_id) %>% 
+      filter(Year == input$select_mapyear)
+    # this_id <- input$select_id
+  })
+  
+  output$dynamicMapScore <- renderPlotly({
+    sub <- ByIdAndYear()
+    
+    plot_geo() %>%
+      add_trace(
+        z = ~sub[[4]],
+        color = ~sub[[4]],
+        colors = 'Reds',
+        text = ~sub$CountryName,
+        locations = ~sub$ISO_Code,
+        marker = list(line = colorList)
+      ) %>%
+      colorbar(title = input$select_id) %>%
+      layout(
+        title = paste("Map of", input$select_id, "in year", input$select_mapyear),
         geo = m_options
       )
     

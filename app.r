@@ -54,7 +54,17 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
            mainPanel(
              plotlyOutput('trendPlot')
            )
-           )
+  ),
+  tabPanel("Map By Score",
+           titlePanel("Map by Score"),
+           headerPanel("Title"),
+           sidebarPanel(
+             selectInput('select_id', 'select_id', choices = unique(allIDS), selected = "hf_score"),
+             selectInput('select_mapyear', 'select_mapyear', choices = unique(all$Year), selected = 2010)
+           ),
+           mainPanel(
+             plotlyOutput("dynamicMapScore")
+           ))
 
 )
 

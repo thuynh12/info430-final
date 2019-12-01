@@ -48,8 +48,8 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
            titlePanel("Summary"),
            headerPanel("Title"),
            sidebarPanel(
-             selectInput('select_country', 'select_country', choices = unique(allCodes$CountryName), selected = "Iran"),
-             selectInput('select_year', 'select_year', choices = unique(allCodes$Year), selected = 2008)
+             selectInput('select_country', 'select_country', choices = unique(allCodes$CountryName), selected = 'United States'),
+             selectInput('selected_year', 'selected_year', choices = unique(allCodes$Year), selected = 2008)
            ),
            mainPanel(
              plotlyOutput('trendPlot')

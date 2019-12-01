@@ -7,6 +7,13 @@ library(plotly)
 library(shinythemes)
 
 # connect to data source
+
+# UNCOMMENT FOR MAC 
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu", 
+#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub", 
+#                       Port = 1433)
+
+# UNCOMMENT FOR WINDOWS
 con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu", 
                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub", 
                       Port = 1433)
@@ -45,6 +52,7 @@ allCodes <- dbGetQuery(con, paste("
                                   sep=""))
 
 
+<<<<<<< HEAD
 
 all <- dbGetQuery(con, paste("
                                 SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
@@ -56,6 +64,10 @@ all <- dbGetQuery(con, paste("
 allCols <- colnames(all)
 allIDS <- allCols[6:10]
 
+=======
+test <- allCodes %>% 
+  filter(Year == 2009 & CountryName == 'Iran')
+>>>>>>> c030a4ab0d5d1217d156dad8dda44f3cc4901656
 
 colorList <- list(color = toRGB("grey"), width = 0.5)
 
@@ -84,15 +96,15 @@ server <- function(input, output) {
   
   #add reactive data information. Dataset = built in diamonds data
   dataset <- reactive({
-    allCodes %>% 
-      filter(Year == input$select_year & CountryName == input$select_country)
+    yearCountrySub <- allCodes %>% 
+      filter(Year == input$selected_year & CountryName == input$select_country)
   })
   
   output$trendPlot <- renderPlotly({
     df <- dataset()
-    p <- plot_ly(
-      x = c('hf_scores', 'ef_score', 'pf_score', 'ef_legal_military', 'pf_expression', 'pf_religion'),
-      y = c(df$hf_score, df$ef_score, df$pf_score, df$ef_legal_military, df$pf_expression, df$pf_religion),
+    p <- plot_ly(df, 
+      x = c('hf_score', 'ef_score', 'pf_score', 'ef_legal_military', 'pf_expression', 'pf_religion'),
+      y = c(~hf_score, ~ef_score, ~pf_score, ~ef_legal_military, ~pf_expression, ~pf_religion),
       type = 'bar'
     ) %>% 
       layout(

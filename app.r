@@ -11,16 +11,17 @@ source("source.r")
 
 
 # Define UI for app that draws a histogram ----
-ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
+ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
   
   tabPanel("Summary", 
       titlePanel("--"),
+      mainPanel(
       h1("Problem Statement"),
       p("It is uncommon for news outlets in the United States to discuss events occurring 
         in different parts of the world. After conducting a global survey, the Pew Research   
         Center discovered that the global median said \"they follow news about their country
         (86%) or city and town (78%) closely,compared with fewer than six-in-ten who say the  
-        same when it comes to news about other countries generally (57%)\".This presents a  
+        same when it comes to news about other countries generally (57%)\". This presents a  
         problem because it forms a demographic that becomes ignorant to world events that   
         have the potential to impact their country. Without the ability to make informed  
         decisions, citizens are unable to acquire the knowledge necessary to determine who  
@@ -29,21 +30,36 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
       p("For our data, we will use the Human Freedom Index dataset from the Cato Institution. 
         This dataset looks at every country from 2008 to 2016 and gives each country a human  
         freedom score ranging from zero to ten. The dataset also gives scores that encompasses  
-        personal, civil, and economic freedoms. Our solution values the understanding of these  
-        rights within countries and is vital when looking at different events occurring throughout  
-        the world to help understand global affairs.")
+        personal, civil, and economic freedoms. In order to focus our analysis we will only be  
+        looking at Hf_score (human freedom score), pf_score (personal freedom score), ef_score  
+        (economic freedom score), ef_legal_military (legal military score), pf_expression (freedom  
+        of expression score) and pf_religion (freedom of religion score). Our solution values the   
+        understanding of these rights within countries and is vital when looking at different events  
+        occurring throughout the world to help understand global affairs."),
+      p("The Cato Institute is a public policy research organization dedicated to the principles 
+        of individual liberty, limited government, free markets and peace. Everyone is provided   
+        with free access to download the reports and datasets surrounding their Human Freedom Index.  
+        The data is very holistic and gives us a wide range of information to work with."),
+      h1("What are we trying to do?"),
+      p("The main goal of our project is to spread awareness and educate people about 
+        the level of freedoms around the world this data alone will be sufficient for analysis,   
+        visualization, and documentation. Because of the nature of our topic and data we will   
+        not be taking user-submitted data.")
+      )
   ),               
      
   # create tab for scatter plot with personal/economic freedom
   tabPanel("Scatter", 
       titlePanel("Personal and Economic Freedom"),
+      sidebarPanel(position = 'left'),
+      mainPanel(
       p("This scatter plot explores the relationship between personal freedom scores, economic 
         freedom scores and human freedom scores. The plot contains scores from all countries
         for years 2008 - 2016. The scatter plot shows that both personal and economic scores 
         have a positive coorelation with human freedom scores. This means that the human freedom 
         score increases when economic and personal freedom scores increase."),
       plotlyOutput("scatterPlot1")
-           
+      )     
   ), 
   
   # create placeholder tab
@@ -61,13 +77,21 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
              p(strong("pf_expression:"),"Personal Freedom of Expression Score"),
              p(strong("pf_religion:"), "Personal Freedom of Religion Score"),
              p(strong("pf_score:"), "Personal Freedom Score")
-             
            ),
            mainPanel(
              plotlyOutput('trendPlot')
            )
   ),
   
+  tabPanel("Table",
+           titlePanel("Interactive Table"),
+           headerPanel("Title"),
+           sidebarPanel(
+             
+           ),
+           mainPanel(
+           )
+  ),
   # create tab for HF Map
   navbarMenu("Maps", 
             
@@ -117,7 +141,6 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
   )
 
 )
-
 
 
 shinyApp(ui = ui, server = server)

@@ -85,8 +85,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
   
   # create placeholder tab
   tabPanel("Bar Chart",
-           titlePanel("Interactive Bar Chart by Country and Year"),
-           headerPanel("Title"),
+           titlePanel("Comparison of Scores By Country and Year"),
            sidebarPanel(
              p("Adjust the filters in order to see freedom scores for a specific Country in a specific year."),
              selectInput('select_country', 'Select a Country:', choices = unique(allCodes$CountryName), selected = 'United States'),
@@ -105,14 +104,17 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
   ),
   
   tabPanel("Table",
-           titlePanel("Interactive Table"),
-           headerPanel("Title"),
+           titlePanel("Ranking Country by Human Freedom"),
+           # headerPanel("Ranking Country by Human Freedom"),
            sidebarPanel(
-             p("Select Year"),
+             p("Select a year to see the ranking for that year."),
              selectInput('select_tbyear', 'Select a Year:', choices = sort(unique(all$Year), decreasing = FALSE), selected = 2008),
-           ),
+             # plotlyOutput('dynamicTableUnranked'),
+             ),
            mainPanel(
-             plotlyOutput('dynamicTable')
+             plotlyOutput('dynamicTable'),
+             h3("The following are countries that are not ranked:"),
+             plotlyOutput('dynamicTableUnranked')
            )
   ),
   # create tab for HF Map
@@ -132,19 +134,10 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
     mainPanel(
       plotlyOutput("dynamicHF")
     )
-    # h3("Static"),
-    # plotlyOutput("staticHF"),
-    # h3("Human Freedom Scores By Year"),
-    
-    # dataTableOutput("datatable")
-    # plotlyOutput("dynamicHF")
-    # p("This is a summary of the project")
-    
   ),
   
   tabPanel("Map By Score",
-           titlePanel("Map by Score"),
-           headerPanel("Mapping Different Scores"),
+           titlePanel("Mapping Different Scores"),
            sidebarPanel(
              p("Select a year and a score to display the map of that score."),
              selectInput('select_id', 'Select a Type of Score:', choices = sort(unique(allIDS), decreasing = FALSE), selected = "hf_score"),

@@ -74,9 +74,6 @@ m_options <- list(showframe = FALSE, showcoastlines = FALSE,
 
 server <- function(input, output) {
   
-  
-  
-  
   #add reactive data information. Dataset = built in diamonds data
   dataset <- reactive({
     yearCountrySub <- allCodes %>% 
@@ -152,11 +149,6 @@ server <- function(input, output) {
       filter(Year == input$select_year)
   })
   
-  
-  
-  # output$datatable <- renderDataTable({
-  #   hf_df_react()
-  # })
   output$dynamicHF <-renderPlotly({
     updated_hf_df <- hf_df_react()
     
@@ -182,7 +174,6 @@ server <- function(input, output) {
     subset_all <- all %>% 
       select(ISO_Code, CountryName, Year, input$select_id) %>% 
       filter(Year == input$select_mapyear)
-    # this_id <- input$select_id
   })
   
   output$dynamicMapScore <- renderPlotly({
@@ -205,6 +196,32 @@ server <- function(input, output) {
     
   })
   
+  queryTable0 <- reactive({
+    zero <- all %>% 
+      filter(Year == input$select_tbyear & hf_rank == 0) %>% 
+      select(CountryName)
+  })
+  
+  output$dynamicTableUnranked <- renderPlotly({
+    unrank <- queryTable0()
+    plot_ly(
+      type = 'table',
+      header = list(
+        values = c("Country"),
+        align = c("center", "center"),
+        line = list(width = 1, color = 'black'),
+        fill = list(color = c("grey", "grey")),
+        font = list(family = "Arial", size = 14, color = "white")
+      ),
+      cells = list(
+        values = rbind(unrank$CountryName),
+        align = c("center", "center"),
+        line = list(color = "black", width = 1),
+        font = list(family = "Arial", size = 12, color = c("black")
+        ))
+    )
+  })
+  
   queryTable <- reactive({
     tb_year <- all %>% 
       select(CountryName, Year, hf_rank, hf_score, ef_score, pf_score) %>% 
@@ -214,7 +231,7 @@ server <- function(input, output) {
   
   output$dynamicTable <- renderPlotly({
     ranking <- queryTable()
-    
+    # unranked <- queryTable0()
     plot_ly(
       type = 'table',
       header = list(

@@ -88,9 +88,11 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
            titlePanel("Interactive Table"),
            headerPanel("Title"),
            sidebarPanel(
-             
+             p("Select Year"),
+             selectInput('select_tbyear', 'Select a Year:', choices = sort(unique(all$Year), decreasing = FALSE), selected = 2008),
            ),
            mainPanel(
+             plotlyOutput('dynamicTable')
            )
   ),
   # create tab for HF Map

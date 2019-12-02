@@ -9,14 +9,14 @@ library(shinythemes)
 # connect to data source
 
 # UNCOMMENT FOR MAC
-con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
-                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
-                      Port = 1433)
-
-# UNCOMMENT FOR WINDOWS
-# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
 #                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
 #                       Port = 1433)
+
+# UNCOMMENT FOR WINDOWS
+con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+                      Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("
@@ -63,27 +63,14 @@ allCols <- colnames(all)
 allIDS <- allCols[6:10]
 
 
+
+
+
 # Settings for color 
 colorList <- list(color = toRGB("grey"), width = 0.5)
 m_options <- list(showframe = FALSE, showcoastlines = FALSE, 
                   projection = list(type = 'Mercator'))
 
-
-# plot_geo(hf_df_2009) %>% 
-#   add_trace(
-#     z = ~hf_score, 
-#     color = ~hf_score,
-#     colors = 'Blues',
-#     text = ~CountryName,
-#     locations = ~ISO_code,
-#     marker = list(line = colorList)
-#   ) %>% 
-#   colorbar(title = "Human Freedom Score") %>% 
-#   layout(
-#     title = "Human Freedom Score in 2009",
-#     geo = m_options
-#   )
- 
 
 server <- function(input, output) {
   
@@ -213,6 +200,34 @@ server <- function(input, output) {
         geo = m_options
       )
     
+  })
+  
+  queryTable <- reactive({
+    tb_year <- all %>% 
+      select(CountryName, Year, hf_rank, hf_score, ef_score, pf_score) %>% 
+      filter(Year == input$select_tbyear & hf_rank != 0) %>% 
+      arrange(hf_rank)
+  })
+  
+  output$dynamicTable <- renderPlotly({
+    ranking <- queryTable()
+    
+    plot_ly(
+      type = 'table',
+      header = list(
+        values = c("Country", "Rank", "Human Freedom Score", "Economic Freedom Score", "Personal Freedom Score"),
+        align = c("center", "center"),
+        line = list(width = 1, color = 'black'),
+        fill = list(color = c("grey", "grey")),
+        font = list(family = "Arial", size = 14, color = "white")
+      ),
+      cells = list(
+        values = rbind(ranking$CountryName, ranking$hf_rank, ranking$hf_score, ranking$ef_score, ranking$pf_score),
+        align = c("center", "center"),
+        line = list(color = "black", width = 1),
+        font = list(family = "Arial", size = 12, color = c("black")
+        ))
+    )
   })
   
 }

@@ -1,1 +1,4 @@
-# info430-final
+# INFO 430 Final Project - Database of Human Freedom
+
+## Problem Statement
+It is uncommon for news outlets in the United States to discuss events occurring in different parts of the world. After conducting a global survey, the Pew Research Center discovered that the global median said "they follow news about their country (86%) or city and town (78%) closely, compared with fewer than six-in-ten who say the same when it comes to news about other countries generally (57%)." This presents a problem because it forms a demographic that becomes ignorant to world events that have the potential to impact their country. Furthermore, people are naive to genocides and oppression within other countries. This can be dangerous because citizens in other countries are not able to recognize the signs of an oppressive government and this can lead to a downward spiral. Our aim is to educate world citizens on human rights issues, violations and changes in all countries. 

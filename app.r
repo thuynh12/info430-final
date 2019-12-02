@@ -4,6 +4,7 @@ library(DBI)
 library(dplyr)
 library(RJDBC)
 library(plotly)
+library(rsconnect)
 library(shinythemes)
 
 # retrieve server variable and plot information

@@ -1,6 +1,7 @@
 library(shiny)
 library(odbc)
 library(DBI)
+library(RODBC)
 library(dplyr)
 library(RJDBC)
 library(plotly)
@@ -9,14 +10,16 @@ library(shinythemes)
 # connect to data source
 
 # UNCOMMENT FOR MAC
+con <- odbcDriverConnect("Driver=ODBC Driver 13 for SQL Server;Server=is-info430.ischool.uw.edu;Database=Group4-Final;UID=INFO430;PWD=wubalubadubdub")
+
 # con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
 #                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
 #                       Port = 1433)
 
 # UNCOMMENT FOR WINDOWS
-con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
-                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
-                      Port = 1433)
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+#                       Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("

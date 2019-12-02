@@ -9,14 +9,14 @@ library(shinythemes)
 # connect to data source
 
 # UNCOMMENT FOR MAC
-con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
-                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
-                      Port = 1433)
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
+#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+#                       Port = 1433)
 
 # UNCOMMENT FOR WINDOWS
-# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu", 
-#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub", 
-#                       Port = 1433)
+con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+                      Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("
@@ -52,8 +52,6 @@ allCodes <- dbGetQuery(con, paste("
                                   sep=""))
 
 
-<<<<<<< HEAD
-
 all <- dbGetQuery(con, paste("
                                 SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
                                 ef_score, ef_legal_military, pf_expression, pf_religion
@@ -61,16 +59,12 @@ all <- dbGetQuery(con, paste("
                                 JOIN Countries as O
                                 ON E.Country_ID = O.Country_ID",
                                 sep=""))
-allCols <- colnames(all)
-allIDS <- allCols[6:10]
+# allCols <- colnames(all)
+# allIDS <- allCols[6:10]
 
-=======
-test <- allCodes %>% 
-  filter(Year == 2009 & CountryName == 'Iran')
->>>>>>> c030a4ab0d5d1217d156dad8dda44f3cc4901656
 
+# Settings for color 
 colorList <- list(color = toRGB("grey"), width = 0.5)
-
 m_options <- list(showframe = FALSE, showcoastlines = FALSE, 
                   projection = list(type = 'Mercator'))
 
@@ -183,7 +177,7 @@ server <- function(input, output) {
       ) %>%
       colorbar(title = "Human Freedom Score") %>%
       layout(
-        title = "Human Freedom Score in 2009",
+        title = paste("Human Freedom Score in", input$select_year),
         geo = m_options
       )
     

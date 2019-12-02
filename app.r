@@ -72,17 +72,25 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
   navbarMenu("Maps", 
             
   tabPanel("Human Freedom Scores", 
-    titlePanel("Human Freedom Score"),
-    h3("Static"),
-    plotlyOutput("staticHF"),
-    h3("Human Freedom Scores By Year"),
-    selectInput('select_year',
-                label = "Select Year",
-                choices = unique(hf_df$Year),
-                selected = 2008
-      ),
+    titlePanel("World Mapping of Freedom Scores 2008-2016"),
+    # headerPanel("World Mapping of Freedom Scores 2008-2016"),
+    sidebarPanel(
+      p("Select a year to see the world mapping of the freedom scores for that year."),
+      selectInput('select_year',
+                  label = "Select Year",
+                  choices = sort(unique(hf_df$Year), decreasing = FALSE),
+                  selected = 2008
+      )
+    ),
+    mainPanel(
+      plotlyOutput("dynamicHF")
+    )
+    # h3("Static"),
+    # plotlyOutput("staticHF"),
+    # h3("Human Freedom Scores By Year"),
+    
     # dataTableOutput("datatable")
-    plotlyOutput("dynamicHF")
+    # plotlyOutput("dynamicHF")
     # p("This is a summary of the project")
     
   ),

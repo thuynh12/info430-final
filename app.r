@@ -41,6 +41,8 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
         with free access to download the reports and datasets surrounding their Human Freedom Index.  
         The data is very holistic and gives us a wide range of information to work with."),
       h2("Understanding the values"), 
+      p("On a scale of 0 to 10, where 10 represents more freedom, the average human freedom rating for 162 
+        countries in 2016 was 6.89."),
       h4(strong("Human Freedom Score (hf_score):")), 
       p("Human freedom is a social concept that recognizes the dignity of individuals and is 
         defined here as negative liberty or the absence of coercive constraint."),
@@ -69,7 +71,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
   ),               
      
   # create tab for scatter plot with personal/economic freedom
-  tabPanel("Scatter", 
+  tabPanel("Personal vs. Economic vs. Human", 
       titlePanel("Personal and Economic Freedom"),
       sidebarPanel(position = 'left',
                    p("This scatter plot explores the relationship between personal freedom scores, economic 
@@ -84,7 +86,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
   ), 
   
   # create placeholder tab
-  tabPanel("Bar Chart",
+  tabPanel("Comparasion of Scores by Country and Year",
            titlePanel("Comparison of Scores By Country and Year"),
            sidebarPanel(
              p("Adjust the filters in order to see freedom scores for a specific Country in a specific year."),
@@ -103,7 +105,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
            )
   ),
   
-  tabPanel("Table",
+  tabPanel("Global Human Freedom Ranking",
            titlePanel("Ranking Country by Human Freedom"),
            # headerPanel("Ranking Country by Human Freedom"),
            sidebarPanel(
@@ -118,7 +120,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
            )
   ),
   # create tab for HF Map
-  navbarMenu("Maps", 
+  navbarMenu("Mappings", 
             
   tabPanel("Human Freedom Scores", 
     titlePanel("World Mapping of Freedom Scores 2008-2016"),
@@ -136,7 +138,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
     )
   ),
   
-  tabPanel("Map By Score",
+  tabPanel("All Freedom Scores and Year",
            titlePanel("Mapping Different Scores"),
            sidebarPanel(
              p("Select a year and a score to display the map of that score."),

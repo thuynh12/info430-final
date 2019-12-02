@@ -9,14 +9,14 @@ library(shinythemes)
 # connect to data source
 
 # UNCOMMENT FOR MAC
-# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
-#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
-#                       Port = 1433)
-
-# UNCOMMENT FOR WINDOWS
-con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
                       Port = 1433)
+
+# UNCOMMENT FOR WINDOWS
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+#                       Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("
@@ -110,7 +110,9 @@ server <- function(input, output) {
         yaxis = list(
           title = 'Score (Ranging from 0-10)',
           range = c(0, 10)
-        )
+        ),
+        height = 600,
+        width= 1000
       )
     
     

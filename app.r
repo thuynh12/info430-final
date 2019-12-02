@@ -12,8 +12,29 @@ source("source.r")
 
 # Define UI for app that draws a histogram ----
 ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
-                 
-  # create tab for scatter plot with personal/economic freedoms
+  
+  tabPanel("Summary", 
+      titlePanel("--"),
+      h1("Problem Statement"),
+      p("It is uncommon for news outlets in the United States to discuss events occurring 
+        in different parts of the world. After conducting a global survey, the Pew Research   
+        Center discovered that the global median said \"they follow news about their country
+        (86%) or city and town (78%) closely,compared with fewer than six-in-ten who say the  
+        same when it comes to news about other countries generally (57%)\".This presents a  
+        problem because it forms a demographic that becomes ignorant to world events that   
+        have the potential to impact their country. Without the ability to make informed  
+        decisions, citizens are unable to acquire the knowledge necessary to determine who  
+        to vote for in elections and do not understand what is occuring in the rest of the world."),
+      h1("Where is this data coming from?"),
+      p("For our data, we will use the Human Freedom Index dataset from the Cato Institution. 
+        This dataset looks at every country from 2008 to 2016 and gives each country a human  
+        freedom score ranging from zero to ten. The dataset also gives scores that encompasses  
+        personal, civil, and economic freedoms. Our solution values the understanding of these  
+        rights within countries and is vital when looking at different events occurring throughout  
+        the world to help understand global affairs.")
+  ),               
+     
+  # create tab for scatter plot with personal/economic freedom
   tabPanel("Scatter", 
       titlePanel("Personal and Economic Freedom"),
       p("This scatter plot explores the relationship between personal freedom scores, economic 
@@ -26,9 +47,30 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
   ), 
   
   # create placeholder tab
-  
+  tabPanel("Bar Chart",
+           titlePanel("Interactive Bar Chart by Country and Year"),
+           headerPanel("Title"),
+           sidebarPanel(
+             p("Adjust the filters in order to see freedom scores for a specific Country in a specific year."),
+             selectInput('select_country', 'Select a Country:', choices = unique(allCodes$CountryName), selected = 'United States'),
+             selectInput('selected_year', 'Select a Year:', choices = unique(allCodes$Year), selected = 2008),
+             h4("Key:"),
+             p(strong("ef_legal_military:"), "Legal Military Freedom Score"),
+             p(strong("ef_score:"), "Economic Freedom Score"),
+             p(strong("hf_score:"), "Human Freedom Score"),
+             p(strong("pf_expression:"),"Personal Freedom of Expression Score"),
+             p(strong("pf_religion:"), "Personal Freedom of Religion Score"),
+             p(strong("pf_score:"), "Personal Freedom Score")
+             
+           ),
+           mainPanel(
+             plotlyOutput('trendPlot')
+           )
+  ),
   
   # create tab for HF Map
+  navbarMenu("Maps", 
+            
   tabPanel("Human Freedom Scores", 
     titlePanel("Human Freedom Score"),
     h3("Static"),
@@ -44,41 +86,22 @@ ui <- navbarPage(theme = shinytheme("journal"), "INFO 430",
     # p("This is a summary of the project")
     
   ),
-  tabPanel("Interactive",
-           titlePanel("Summary"),
-           headerPanel("Title"),
-           sidebarPanel(
-             selectInput('select_country', 'select_country', choices = unique(allCodes$CountryName), selected = 'United States'),
-             selectInput('selected_year', 'selected_year', choices = unique(allCodes$Year), selected = 2008)
-           ),
-           mainPanel(
-             plotlyOutput('trendPlot')
-           )
-  ),
+  
   tabPanel("Map By Score",
            titlePanel("Map by Score"),
            headerPanel("Title"),
            sidebarPanel(
-             selectInput('select_id', 'select_id', choices = unique(allIDS), selected = "hf_score"),
-             selectInput('select_mapyear', 'select_mapyear', choices = unique(all$Year), selected = 2010)
+             selectInput('select_id', 'Select a Type of Score:', choices = unique(allIDS), selected = "hf_score"),
+             selectInput('select_mapyear', 'Select a Year:', choices = unique(all$Year), selected = 2010)
            ),
            mainPanel(
              plotlyOutput("dynamicMapScore")
            ))
+  
+  )
 
 )
 
-# tabPanel("Interactive Bar Chart", 
-#          titlePanel("Summary"),
-#          headerPanel("Title for side panel"),
-#          sidebarPanel(
-#            selectInput('select_country', choices = allCodes$CountryName, selected = "A"),
-#            selectInput('select_year', choices = unique(allCodes$Year), selected = 2008)
-#          ), 
-#          mainPanel(
-#            plotlyOutput('trendPlot', height = "900px")
-#          )
-         
 
 
 shinyApp(ui = ui, server = server)

@@ -8,15 +8,15 @@ library(shinythemes)
 
 # connect to data source
 
-# UNCOMMENT FOR MAC 
-# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu", 
-#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub", 
-#                       Port = 1433)
+# UNCOMMENT FOR MAC
+con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
+                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+                      Port = 1433)
 
 # UNCOMMENT FOR WINDOWS
-con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu", 
-                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub", 
-                      Port = 1433)
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu", 
+#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub", 
+#                       Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("
@@ -108,13 +108,13 @@ server <- function(input, output) {
       type = 'bar'
     ) %>% 
       layout(
-        title = 'help',
+        title = paste('Freedom Scores in', input$select_country,'in', input$selected_year),
         xaxis = list(
           type = 'category',
-          title = 'scores'
+          title = 'Type of Freedom Score'
         ),
         yaxis = list(
-          title = 'score',
+          title = 'Score (Ranging from 0-10)',
           range = c(0, 10)
         )
       )

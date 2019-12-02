@@ -14,9 +14,9 @@ source("source.r")
 ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
   
   tabPanel("Summary", 
-      titlePanel("--"),
+      titlePanel(h1("Global Freedom Scores")),
       mainPanel(
-      h1("Problem Statement"),
+      h2("Problem Statement"),
       p("It is uncommon for news outlets in the United States to discuss events occurring 
         in different parts of the world. After conducting a global survey, the Pew Research   
         Center discovered that the global median said \"they follow news about their country
@@ -26,7 +26,7 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
         have the potential to impact their country. Without the ability to make informed  
         decisions, citizens are unable to acquire the knowledge necessary to determine who  
         to vote for in elections and do not understand what is occuring in the rest of the world."),
-      h1("Where is this data coming from?"),
+      h2("Where is this data coming from?"),
       p("For our data, we will use the Human Freedom Index dataset from the Cato Institution. 
         This dataset looks at every country from 2008 to 2016 and gives each country a human  
         freedom score ranging from zero to ten. The dataset also gives scores that encompasses  
@@ -40,7 +40,7 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
         of individual liberty, limited government, free markets and peace. Everyone is provided   
         with free access to download the reports and datasets surrounding their Human Freedom Index.  
         The data is very holistic and gives us a wide range of information to work with."),
-      h1("What are we trying to do?"),
+      h2("What are we trying to do?"),
       p("The main goal of our project is to spread awareness and educate people about 
         the level of freedoms around the world this data alone will be sufficient for analysis,   
         visualization, and documentation. Because of the nature of our topic and data we will   
@@ -51,13 +51,14 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
   # create tab for scatter plot with personal/economic freedom
   tabPanel("Scatter", 
       titlePanel("Personal and Economic Freedom"),
-      sidebarPanel(position = 'left'),
+      sidebarPanel(position = 'left',
+                   p("This scatter plot explores the relationship between personal freedom scores, economic 
+                      freedom scores and human freedom scores. The plot contains scores from all countries
+                     for years 2008 - 2016. The scatter plot shows that both personal and economic scores 
+                     have a positive coorelation with human freedom scores. This means that the human freedom 
+                     score increases when economic and personal freedom scores increase.")),
       mainPanel(
-      p("This scatter plot explores the relationship between personal freedom scores, economic 
-        freedom scores and human freedom scores. The plot contains scores from all countries
-        for years 2008 - 2016. The scatter plot shows that both personal and economic scores 
-        have a positive coorelation with human freedom scores. This means that the human freedom 
-        score increases when economic and personal freedom scores increase."),
+      p(""),
       plotlyOutput("scatterPlot1")
       )     
   ), 

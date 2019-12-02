@@ -9,14 +9,14 @@ library(shinythemes)
 # connect to data source
 
 # UNCOMMENT FOR MAC
-# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
-#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
-#                       Port = 1433)
-
-# UNCOMMENT FOR WINDOWS
-con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
                       Port = 1433)
+
+# UNCOMMENT FOR WINDOWS
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+#                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+#                       Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("
@@ -73,6 +73,9 @@ m_options <- list(showframe = FALSE, showcoastlines = FALSE,
 
 
 server <- function(input, output) {
+  
+  
+  
   
   #add reactive data information. Dataset = built in diamonds data
   dataset <- reactive({
@@ -229,5 +232,46 @@ server <- function(input, output) {
         ))
     )
   })
+  
+  output$summaryTable <- renderPlotly({
+    
+    values <- rbind(c('Human Freedom Score', 'Personal Freedom Score', 'Economic Freedom Score', 'Legal Military Score', 
+                      'Personal Freedom of Expression Score', 'Personal Freedom of Religion Score'),
+                    c("hf_score", 
+                      "pf_score", 
+                      "ef_score", 
+                      "ef_legal_military", 
+                      "pf_expression",
+                      "pf_religion"),
+                    c(1, 
+                      2, 
+                      3, 
+                      4, 
+                      5,
+                      6))
+    
+    p <- plot_ly(
+      type = 'table',
+      columnorder = c(1, 2, 3),
+      columnwidth = c(100, 100, 400),
+      header = list(
+        values = c('Type of Score', 'Abbreviation','Description'),
+        line = list(color = 'black'),
+        fill = list(color = '#119DFF'),
+        align = c('left','center'),
+        font = list(color = 'white', size = 12),
+        height = 40
+      ),
+      cells = list(
+        values = values,
+        line = list(color = '#506784'),
+        fill = list(color = c('#25FEFD', 'white')),
+        align = c('left', 'center'),
+        font = list(color = c('#506784'), size = 12),
+        height = 30
+      ))
+  })
+  
+  
   
 }

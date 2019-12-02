@@ -40,12 +40,15 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
         of individual liberty, limited government, free markets and peace. Everyone is provided   
         with free access to download the reports and datasets surrounding their Human Freedom Index.  
         The data is very holistic and gives us a wide range of information to work with."),
+      h2("Understanding the values"), 
+      plotlyOutput('summaryTable'),
       h2("What are we trying to do?"),
       p("The main goal of our project is to spread awareness and educate people about 
         the level of freedoms around the world this data alone will be sufficient for analysis,   
         visualization, and documentation. Because of the nature of our topic and data we will   
         not be taking user-submitted data.")
-      )
+      ),
+      sidebarPanel()
   ),               
      
   # create tab for scatter plot with personal/economic freedom

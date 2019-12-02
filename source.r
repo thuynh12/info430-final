@@ -9,14 +9,14 @@ library(shinythemes)
 # connect to data source
 
 # UNCOMMENT FOR MAC
-con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
-                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
-                      Port = 1433)
-
-# UNCOMMENT FOR WINDOWS
-# con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+# con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 13 for SQL Server", Server = "is-info430.ischool.uw.edu",
 #                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
 #                       Port = 1433)
+
+# UNCOMMENT FOR WINDOWS
+con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", Server = "is-info430.ischool.uw.edu",
+                      Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
+                      Port = 1433)
 
 # query data source to get all entries with the countryName, year and scores
 entry <- dbGetQuery(con, paste("
@@ -73,6 +73,7 @@ m_options <- list(showframe = FALSE, showcoastlines = FALSE,
 
 
 server <- function(input, output) {
+
   
   #add reactive data information. Dataset = built in diamonds data
   dataset <- reactive({

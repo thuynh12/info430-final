@@ -66,8 +66,10 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
       p("The main goal of our project is to spread awareness and educate people about 
         the level of freedoms around the world this data alone will be sufficient for analysis,   
         visualization, and documentation. Because of the nature of our topic and data we will   
-        not be taking user-submitted data.")
+        not be taking user-submitted data."),
+      p(strong("Created by Andrea Koozer, Rahma Kamel and Tracy Huynh"))
       )
+      
   ),               
      
   # create tab for scatter plot with personal/economic freedom

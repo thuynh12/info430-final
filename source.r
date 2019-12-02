@@ -17,7 +17,7 @@ library(shinythemes)
 #                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
 #                       Port = 1433)
 
-con <- DBI::dbConnect(odbc::odbc(), Driver = "ODBC Driver 17 for SQL Server", 
+con <- DBI::dbConnect(odbc::odbc(), Driver = "SQL Server", 
                       Server = "is-info430.ischool.uw.edu",
                       Database = "Group4-Final", 
                       UID = "INFO430", 

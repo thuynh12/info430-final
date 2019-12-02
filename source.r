@@ -54,7 +54,7 @@ allCodes <- dbGetQuery(con, paste("
 
 all <- dbGetQuery(con, paste("
                                 SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
-                                ef_score, ef_legal_military, pf_expression, pf_religion
+                                ef_score, pf_score, ef_legal_military, pf_expression, pf_religion
                                 FROM Entries as E
                                 JOIN Countries as O
                                 ON E.Country_ID = O.Country_ID",
@@ -67,7 +67,6 @@ allIDS <- allCols[6:10]
 colorList <- list(color = toRGB("grey"), width = 0.5)
 m_options <- list(showframe = FALSE, showcoastlines = FALSE, 
                   projection = list(type = 'Mercator'))
-
 
 
 # plot_geo(hf_df_2009) %>% 

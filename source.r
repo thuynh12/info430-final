@@ -59,8 +59,8 @@ all <- dbGetQuery(con, paste("
                                 JOIN Countries as O
                                 ON E.Country_ID = O.Country_ID",
                                 sep=""))
-# allCols <- colnames(all)
-# allIDS <- allCols[6:10]
+allCols <- colnames(all)
+allIDS <- allCols[6:10]
 
 
 # Settings for color 

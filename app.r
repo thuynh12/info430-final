@@ -41,14 +41,31 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
         with free access to download the reports and datasets surrounding their Human Freedom Index.  
         The data is very holistic and gives us a wide range of information to work with."),
       h2("Understanding the values"), 
-      plotlyOutput('summaryTable'),
+      h4(strong("Human Freedom Score (hf_score):")), 
+      p("Human freedom is a social concept that recognizes the dignity of individuals and is 
+        defined here as negative liberty or the absence of coercive constraint."),
+      h4(strong("Personal Freedom Score (pf_score):")), 
+      p("Personal freedom encompasses the freedom of a person in going and coming, equality before 
+        the courts, security of private property, freedom of opinion and its expression, and freedom  
+        of conscience subject to the rights of others and of the public"),
+      h4(strong("Econmic Freedom Score (ef_score):")), 
+      p("Economic freedom is the fundamental right of every human to control his or her own labor and property. 
+        In an economically free society, individuals are free to work, produce, consume, and invest in any way they please."),
+      h4(strong("Legal Military Freedom Score (ef_legal_military):")), 
+      p("A measure of the military’s involvement in politics. Since the military is not elected, involvement, even at a 
+peripheral level, diminishes democratic accountability. Military involvement might stem from an external or internal threat, be symptomatic of  
+        underlying difficulties, or be a full-scale military takeover."),
+      h4(strong("Personal Freedom of Expression Score (pf_expression):")), 
+      p("Freedom of speech is a principle that supports the freedom of an individual or a community to articulate their opinions and ideas without fear of retaliation,
+censorship, or legal sanction. The term \"freedom of expression\" is sometimes used synonymously but includes any act of seeking, receiving, and imparting information or ideas, regardless of the medium used."),
+      h4(strong("Personal Freedom of Religion Score (pf_religion):")), 
+      p("Freedom of Religion is the right to practice one's religion or exercise one's beliefs without intervention by the government and to be free of the exercise of authority by a church through the government"),
       h2("What are we trying to do?"),
       p("The main goal of our project is to spread awareness and educate people about 
         the level of freedoms around the world this data alone will be sufficient for analysis,   
         visualization, and documentation. Because of the nature of our topic and data we will   
         not be taking user-submitted data.")
-      ),
-      sidebarPanel()
+      )
   ),               
      
   # create tab for scatter plot with personal/economic freedom

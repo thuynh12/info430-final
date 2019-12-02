@@ -21,47 +21,71 @@ con <- odbcDriverConnect("Driver=ODBC Driver 13 for SQL Server;Server=is-info430
 #                       Database = "Group4-Final", UID = "INFO430", PWD = "wubalubadubdub",
 #                       Port = 1433)
 
-# query data source to get all entries with the countryName, year and scores
-entry <- dbGetQuery(con, paste("
-    SELECT hf_score, ef_score, pf_score, CountryName, EntryYear
-                               FROM Entries As e
-                               Inner Join Countries As c
-                               On e.Country_ID = c.Country_ID", 
-                               sep=""))
 
-hf_df <- dbGetQuery(con, paste("SELECT ISO_code, c.CountryName, hf_score, Year=Year(EntryYear) 
+
+# query data source to get all entries with the countryName, year and scores
+# entry <- dbGetQuery(con, paste("
+#     SELECT hf_score, ef_score, pf_score, CountryName, EntryYear
+#                                FROM Entries As e
+#                                Inner Join Countries As c
+#                                On e.Country_ID = c.Country_ID", 
+#                                sep=""))
+
+
+entry <- sqlQuery(con, "SELECT hf_score, ef_score, pf_score, CountryName, EntryYear
+                        FROM Entries As e
+                        Inner Join Countries As c
+                        On e.Country_ID = c.Country_ID")
+
+# hf_df <- dbGetQuery(con, paste("SELECT ISO_code, c.CountryName, hf_score, Year=Year(EntryYear) 
+#                                 FROM Entries AS e
+#                                 JOIN Countries as c
+#                                 ON e.Country_ID =c.Country_ID"))
+
+hf_df <- sqlQuery(con,"SELECT ISO_code, c.CountryName, hf_score, Year=Year(EntryYear) 
                                 FROM Entries AS e
                                 JOIN Countries as c
-                                ON e.Country_ID =c.Country_ID"))
+                                ON e.Country_ID =c.Country_ID")
+
+# hf_df_2009 <- dbGetQuery(con, paste("
+#                                   SELECT ISO_code, c.CountryName, hf_score
+#                                   FROM Entries AS e
+#                                   JOIN Countries as c
+#                                   ON e.Country_ID =c.Country_ID
+#                                   WHERE Year(e.EntryYear) = 2009"))
 
 
+# allCodes <- dbGetQuery(con, paste("
+#                                   SELECT e.hf_score, e.ef_score, e.pf_score, hfi.ef_legal_military, 
+#                                   hfi.pf_expression, hfi.pf_religion, CountryName, Year=Year(EntryYear)
+#                                   FROM [human-freedom-index] As hfi
+#                                   JOIN Entries As e 
+#                                   ON hfi.hf_score = e.hf_score
+#                                   JOIN Countries As c
+#                                   On e.Country_ID = c.Country_ID",
+#                                   sep=""))
 
-hf_df_2009 <- dbGetQuery(con, paste("
-                                  SELECT ISO_code, c.CountryName, hf_score
-                                  FROM Entries AS e
-                                  JOIN Countries as c
-                                  ON e.Country_ID =c.Country_ID
-                                  WHERE Year(e.EntryYear) = 2009"))
-
-
-allCodes <- dbGetQuery(con, paste("
-                                  SELECT e.hf_score, e.ef_score, e.pf_score, hfi.ef_legal_military, 
+allCodes <- sqlQuery(con, "SELECT e.hf_score, e.ef_score, e.pf_score, hfi.ef_legal_military, 
                                   hfi.pf_expression, hfi.pf_religion, CountryName, Year=Year(EntryYear)
                                   FROM [human-freedom-index] As hfi
                                   JOIN Entries As e 
                                   ON hfi.hf_score = e.hf_score
                                   JOIN Countries As c
-                                  On e.Country_ID = c.Country_ID",
-                                  sep=""))
+                                  On e.Country_ID = c.Country_ID")
 
 
-all <- dbGetQuery(con, paste("
-                                SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
+# all <- dbGetQuery(con, paste("
+#                                 SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
+#                                 ef_score, pf_score, ef_legal_military, pf_expression, pf_religion
+#                                 FROM Entries as E
+#                                 JOIN Countries as O
+#                                 ON E.Country_ID = O.Country_ID",
+#                                 sep=""))
+all <- sqlQuery(con, "SELECT ISO_Code, O.CountryName, Year=Year(E.EntryYear), hf_rank, hf_quartile, hf_score, 
                                 ef_score, pf_score, ef_legal_military, pf_expression, pf_religion
                                 FROM Entries as E
                                 JOIN Countries as O
-                                ON E.Country_ID = O.Country_ID",
-                                sep=""))
+                                ON E.Country_ID = O.Country_ID")
 allCols <- colnames(all)
 allIDS <- allCols[6:10]
 

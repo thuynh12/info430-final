@@ -98,7 +98,10 @@ server <- function(input, output) {
     p <- plot_ly(df, 
       x = c('hf_score', 'ef_score', 'pf_score', 'ef_legal_military', 'pf_expression', 'pf_religion'),
       y = c(~hf_score, ~ef_score, ~pf_score, ~ef_legal_military, ~pf_expression, ~pf_religion),
-      type = 'bar'
+      type = 'bar', 
+      marker = list(color = 'rgb(158,202,225)',
+                    line = list(color = 'rgb(8,48,107)',
+                                width = 1.5))
     ) %>% 
       layout(
         title = paste('Freedom Scores in', input$select_country,'in', input$selected_year),
@@ -110,8 +113,8 @@ server <- function(input, output) {
           title = 'Score (Ranging from 0-10)',
           range = c(0, 10)
         ),
-        height = 600,
-        width= 1000
+        height = 500,
+        width= 900
       )
     
     
@@ -132,7 +135,7 @@ server <- function(input, output) {
                 name = "Economic Freedom <br> Trend Line", mode = "lines",
                 line = list(color = 'rgb(253,198,131)')) %>%
       layout(title = "Economic and Personal Freedom vs. Human Freedom", 
-             xaxis = list(title = "Human Freedom Score"), yaxis = list(title = "Freedom Score"))
+             xaxis = list(title = "Human Freedom Score"), yaxis = list(title = "Freedom Score"), height = 900, width = 1000)
   })
   
   

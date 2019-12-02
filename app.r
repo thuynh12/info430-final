@@ -69,7 +69,7 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
            sidebarPanel(
              p("Adjust the filters in order to see freedom scores for a specific Country in a specific year."),
              selectInput('select_country', 'Select a Country:', choices = unique(allCodes$CountryName), selected = 'United States'),
-             selectInput('selected_year', 'Select a Year:', choices = unique(allCodes$Year), selected = 2008),
+             selectInput('selected_year', 'Select a Year:', choices = sort(unique(allCodes$Year), decreasing = FALSE), selected = 2008),
              h4("Key:"),
              p(strong("ef_legal_military:"), "Legal Military Freedom Score"),
              p(strong("ef_score:"), "Economic Freedom Score"),
@@ -121,10 +121,18 @@ ui <- navbarPage(theme = shinytheme("flatly"), "INFO 430",
   
   tabPanel("Map By Score",
            titlePanel("Map by Score"),
-           headerPanel("Title"),
+           headerPanel("Mapping Different Scores"),
            sidebarPanel(
-             selectInput('select_id', 'Select a Type of Score:', choices = unique(allIDS), selected = "hf_score"),
-             selectInput('select_mapyear', 'Select a Year:', choices = unique(all$Year), selected = 2010)
+             p("Select a year and a score to display the map of that score."),
+             selectInput('select_id', 'Select a Type of Score:', choices = sort(unique(allIDS), decreasing = FALSE), selected = "hf_score"),
+             selectInput('select_mapyear', 'Select a Year:', choices = unique(all$Year), selected = 2008),
+             h4("Key:"),
+             p(strong("ef_legal_military:"), "Legal Military Freedom Score"),
+             p(strong("ef_score:"), "Economic Freedom Score"),
+             p(strong("hf_score:"), "Human Freedom Score"),
+             p(strong("pf_expression:"),"Personal Freedom of Expression Score"),
+             p(strong("pf_religion:"), "Personal Freedom of Religion Score"),
+             p(strong("pf_score:"), "Personal Freedom Score")
            ),
            mainPanel(
              plotlyOutput("dynamicMapScore")

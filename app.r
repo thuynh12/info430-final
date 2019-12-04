@@ -146,7 +146,7 @@ censorship, or legal sanction. The term \"freedom of expression\" is sometimes u
            sidebarPanel(
              p("Select a year and a score to display the map of that score."),
              selectInput('select_id', 'Select a Type of Score:', choices = sort(unique(allIDS), decreasing = FALSE), selected = "hf_score"),
-             selectInput('select_mapyear', 'Select a Year:', choices = unique(all$Year), selected = 2008),
+             selectInput('select_mapyear', 'Select a Year:', choices = sort(unique(all$Year), decreasing = FALSE), selected = 2008),
              h4("Key:"),
              p(strong("ef_legal_military:"), "Legal Military Freedom Score"),
              p(strong("ef_score:"), "Economic Freedom Score"),
